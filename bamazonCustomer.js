@@ -116,28 +116,35 @@ function doQueries(tableName, callback){
 
 				//Sets variable to user selected item ID 
 				var itemID = userInput.item;
-				console.log("itemID: "+userInput.item);
-
-
-
-
-
-
-
+				console.log("Thank you for ordering: "+res1[itemID - 1].product_name);
 
 
 
 				var amount = res1[itemID - 1].stock_quantity;
 
-				//Compare stock quantity with user quantity
-				if(amount <= userInput.howMany){console.log("Sorry, we do not have enough items in stock")
-					return false}
+				//Compare stock quantity with user quantity and stop process if the user chooses a quantity that exceeds the stock quantity 
+				if(amount <= userInput.howMany){
+
+					console.log("Sorry, we do not have enough items in stock")
+					return false};
 
 
 
+				//Displays the total prices for the purchase 
+				var total = userInput.howMany * res1[itemID-1].price;
+				console.log("Order Total: "+total);
+
+
+
+
+				//Displays the remaining stock after the user make's purchase	
 				amount = amount - 1;
-				console.log("new amount: "+amount);
+				console.log("Amount remaining: "+amount);
 				
+
+
+
+
 				connection.query("UPDATE storefront SET stock_quantity = ? WHERE item_id = ? ",[amount,itemID],function (err,res2){
 					
 					if (err){  
@@ -145,7 +152,7 @@ function doQueries(tableName, callback){
 						return;
 					}
 
-					console.log("in the update function");
+					//console.log("in the update function");
 					connection.query("SELECT * FROM "+ tableName, function(err,res3){
 
 					if (err){
@@ -282,7 +289,8 @@ doQueries('storefront', function(err, result){
 		if(err)
 			console.log("function finished with err:"+err);
 		else{
-			console.log("successful");
+			console.log("Thank You for Shopping at Bamazon!");
+			console.log("Scroll up to view purchase details");
 			//console.log(result);
 
 		}

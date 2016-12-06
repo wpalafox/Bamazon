@@ -100,7 +100,10 @@ function doQueries(tableName, callback){
 			  	type: "input",
 			  	message: "How many units?",
 			  	name: "howMany"
-			
+				/*Validation of input
+				validate: function(value){
+					if(isNaN === false){return true} 
+				} */
 			  }
 
 
@@ -115,7 +118,23 @@ function doQueries(tableName, callback){
 				var itemID = userInput.item;
 				console.log("itemID: "+userInput.item);
 
+
+
+
+
+
+
+
+
+
 				var amount = res1[itemID - 1].stock_quantity;
+
+				//Compare stock quantity with user quantity
+				if(amount <= userInput.howMany){console.log("Sorry, we do not have enough items in stock")
+					return false}
+
+
+
 				amount = amount - 1;
 				console.log("new amount: "+amount);
 				
@@ -263,8 +282,8 @@ doQueries('storefront', function(err, result){
 		if(err)
 			console.log("function finished with err:"+err);
 		else{
-			console.log("successfull");
-			console.log(result);
+			console.log("successful");
+			//console.log(result);
 
 		}
 		connection.end();

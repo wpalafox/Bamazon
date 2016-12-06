@@ -48,115 +48,142 @@ connection.connect(function(err){
 
 
 //Prints the table from the mySQL database 
-function list(table){
 
-      connection.query("SELECT * FROM " + table, function(err, res){
+
+
+
+function doQueries(tableName, callback){    
+
+      connection.query("SELECT * FROM " + tableName, function(err, res1){
       
+		if (err){ 
+			callback(err);
+			return;
+		}
+			
+		// Using the response to generate the table from sql 
+
 		var tableDisplay = new Table({ 
 
 			head: ['Item', 'Product Name', 'Department Name', 'Price', 'Stock Quantity']
 		  	,colWidths: [6, 18, 18, 10, 17]
 
-				});
+		});
 
-
-			if (err) throw err;
-        
-        	// table is an Array, so you can `push`, `unshift`, `splice` and friends 
-
-      		for(i=0;i<res.length;i++){
-
+			
+		for(i=0;i<res1.length;i++){
+      		
       		tableDisplay.push(
     
-			    [res[i].item_id, res[i].product_name, res[i].department_name, res[i].price, res[i].stock_quantity] 
+			    [res1[i].item_id, res1[i].product_name, res1[i].department_name, res1[i].price, res1[i].stock_quantity] 
 			
 			);
       
       	}
 
-      		console.log(tableDisplay.toString());
+      	console.log(tableDisplay.toString());
       		//calls the prompt user function and takes the response as an argument/parameter
       		
-      		promptUsers(res);
-      		
+      	inquirer.prompt([
 
-		
+			  	// Here we give the user a list to choose from.
+			  {
+			    
+			    type: "input",
+			    message: "Enter an Item ID you would like to buy",
+			    name: "item"
+			  
+			  },
+			
+			  {
+
+			  	type: "input",
+			  	message: "How many units?",
+			  	name: "howMany"
+			
+			  }
+
+
+
+
+			]).then(function(userInput) {
+
+				// If we log that user as a JSON, we can see how it looks.
+				 //console.log(JSON.stringify(userInput));
+
+				//Sets variable to user selected item ID 
+				var itemID = userInput.item;
+				console.log("itemID: "+userInput.item);
+
+				var amount = res1[itemID - 1].stock_quantity;
+				amount = amount - 1;
+				console.log("new amount: "+amount);
+				
+				connection.query("UPDATE storefront SET stock_quantity = ? WHERE item_id = ? ",[amount,itemID],function (err,res2){
+					
+					if (err){  
+						callback(err); 
+						return;
+					}
+
+					console.log("in the update function");
+					connection.query("SELECT * FROM "+ tableName, function(err,res3){
+
+					if (err){
+						callback(err);
+						return;
+					}
+
+					tableDisplay = new Table({ 
+
+						head: ['Item', 'Product Name', 'Department Name', 'Price', 'Stock Quantity']
+		  						,colWidths: [6, 18, 18, 10, 17]
+
+						});
+
+					for(i=0;i<res3.length;i++){
+      		
+      					tableDisplay.push(
+    
+			    			[res3[i].item_id, res3[i].product_name, res3[i].department_name, res3[i].price, res3[i].stock_quantity] 
+			
+					);
+      
+      				}
+
+      				console.log(tableDisplay.toString());
+
+					callback(null, res3);
+					
+				});
+					
+					
+				});
+				
+			});
+
+
 	});
-     
 };
 
 
 
-
-
-function updateTable
-
-
-
-//Prompts users for the specific item they want, and how many units
-function promptUsers(res){
-
-	
-		inquirer.prompt([
-
-		  	// Here we give the user a list to choose from.
-		  {
-		    
-		    type: "input",
-		    message: "Enter an Item ID you would like to buy",
-		    name: "item"
-		  
-		  },
-		
-		  {
-
-		  	type: "input",
-		  	message: "How many units?",
-		  	name: "howMany"
-		
-		  }
-
-
-
-
-		]).then(function(userInput) {
-
-			// If we log that user as a JSON, we can see how it looks.
-			 //console.log(JSON.stringify(userInput));
-
-			//Sets variable to user selected item ID 
-			var itemID = userInput.item;
-			console.log("itemID: "+userInput.item);
-
-			var amount = res[itemID - 1].stock_quantity;
-			amount = amount - 1;
-			console.log("new amount: "+amount);
-			
-			connection.query("UPDATE storefront SET item_id = ?",amount,function (error,resHere){
-				//	if (error) throw error;
-				console.log("in the update function");
-			
-			});
-			
-			
-
-			
-			
-
-
-
-
-			//console.log(res[itemID].stock_quantity);
-		
-
-
-
-
+/*	request_handler(req){
+		doQueries( function(err, result){
+			if(err)
+				report_error(err);
+			else
+				write_result(req, result); 
 
 		});
 
+	} */
 
-};
+
+
+
+
+
 
 
 /*
@@ -197,16 +224,6 @@ connection.query("SELECT * FROM storefront", function(err2, upRes){
 
 
 
-
-
-
-
-
-
-
-
-
-
 /*
 function testFunction(){ 
 
@@ -239,11 +256,22 @@ function testFunction(){
 
 
 //testFunction();
-list('storefront');
+//list('storefront');
 
 //promptUsers();
+doQueries('storefront', function(err, result){
+		if(err)
+			console.log("function finished with err:"+err);
+		else{
+			console.log("successfull");
+			console.log(result);
 
-connection.end();
+		}
+		connection.end();
+		return;
+});
+
+//connection.end();
 
 
 /*

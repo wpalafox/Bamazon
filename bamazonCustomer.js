@@ -50,8 +50,6 @@ connection.connect(function(err){
 //Prints the table from the mySQL database 
 
 
-
-
 function doQueries(tableName, callback){    
 
       connection.query("SELECT * FROM " + tableName, function(err, res1){
@@ -116,7 +114,7 @@ function doQueries(tableName, callback){
 
 				//Sets variable to user selected item ID 
 				var itemID = userInput.item;
-				console.log("Thank you for ordering: "+res1[itemID - 1].product_name);
+				console.log("Request for: "+res1[itemID - 1].product_name);
 
 
 
@@ -126,9 +124,15 @@ function doQueries(tableName, callback){
 				if(amount <= userInput.howMany){
 
 					console.log("Sorry, we do not have enough items in stock")
-					return false};
+					console.log("Push Control + C to restart the app")
+					return false; 
 
+				};
 
+				//Displays the new Amount remaining after order goes through
+				var newAmount = amount - userInput.howMany;
+				console.log("Amount remaining: "+newAmount);
+				
 
 				//Displays the total prices for the purchase 
 				var total = userInput.howMany * res1[itemID-1].price;
@@ -137,15 +141,13 @@ function doQueries(tableName, callback){
 
 
 
-				//Displays the remaining stock after the user make's purchase	
-				amount = amount - 1;
-				console.log("Amount remaining: "+amount);
+				
+				
 				
 
+				
 
-
-
-				connection.query("UPDATE storefront SET stock_quantity = ? WHERE item_id = ? ",[amount,itemID],function (err,res2){
+				connection.query("UPDATE storefront SET stock_quantity = ? WHERE item_id = ? ",[newAmount,itemID],function (err,res2){
 					
 					if (err){  
 						callback(err); 

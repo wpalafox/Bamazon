@@ -35,9 +35,67 @@ connection.connect(function(err){
 
 //Prompt Function 
 
-//Function that captures user inpt
-function UI(){
-	//Prompts the user with a list of options
+
+
+/////////////////////////////////////////////////
+
+
+function end() {
+	console.log("Good Bye!");
+	connection.end();
+};
+
+/////////////////////////////////////////////////
+
+
+
+
+
+
+
+function doQueries(tableName, callback){    
+
+function displayProducts(){
+
+ connection.query("SELECT * FROM " + tableName, function(err, res1){
+      
+		if (err){ 
+			callback(err);
+			return;
+		}
+			
+		// Using the response to generate the table from sql 
+
+		var tableDisplay = new Table({ 
+
+			head: ['Item', 'Product Name', 'Department Name', 'Price', 'Stock Quantity']
+		  	,colWidths: [6, 18, 18, 10, 17]
+
+		});
+
+		//Loop that dynamically produces the full table 
+		for(i=0;i<res1.length;i++){
+      		
+      		tableDisplay.push(
+    
+			    [res1[i].item_id, res1[i].product_name, res1[i].department_name, res1[i].price, res1[i].stock_quantity] 
+			
+			);
+      
+      	};
+
+});
+
+///////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+//Prompts the user with a list of options
 	inquirer.prompt(
 		{
 			type: "list",
@@ -67,17 +125,10 @@ function UI(){
 				console.log("Error");
 		}
 	})
-}
-
-/////////////////////////////////////////////////
 
 
-function end() {
-	console.log("Good Bye!");
-	connection.end();
 };
 
-/////////////////////////////////////////////////
 
 
 
@@ -85,48 +136,43 @@ function end() {
 
 
 
-function displayProducts(tableName){   
+
+};
 
 
-      connection.query("SELECT * FROM " + tableName, function(err, res1){
-      
-		if (err){ 
-			callback(err);
-			return;
+
+
+
+
+ 
+
+
+     
+
+
+
+
+
+
+
+
+
+
+
+
+//doQueries function handles the aync issues with ease
+doQueries('storefront', function(err, result){
+		if(err)
+			console.log("function finished with err:"+err);
+		else{
+			console.log("Thanks for using our App!");
+			
+			
+
 		}
-			
-		// Using the response to generate the table from sql 
-
-		var tableDisplay = new Table({ 
-
-			head: ['Item', 'Product Name', 'Department Name', 'Price', 'Stock Quantity']
-		  	,colWidths: [6, 18, 18, 10, 17]
-
-		});
-
-		//Loop that dynamically produces the full table 
-		for(i=0;i<res1.length;i++){
-      		
-      		tableDisplay.push(
-    
-			    [res1[i].item_id, res1[i].product_name, res1[i].department_name, res1[i].price, res1[i].stock_quantity] 
-			
-			);
-      
-      	};
-
-	});
-
-
-};
-
-
-
-
-
-
-
-UI();
+		connection.end();
+		return;
+});
 
 
 

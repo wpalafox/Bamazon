@@ -68,7 +68,7 @@ function doQueries(tableName, callback){
 
 		});
 
-		//Loop that dynamically produces the full table
+		//Loop that dynamically produces the full table 
 		for(i=0;i<res1.length;i++){
       		
       		tableDisplay.push(
@@ -90,17 +90,18 @@ function doQueries(tableName, callback){
 			    type: "input",
 			    message: "Enter an Item ID you would like to buy",
 			    name: "item"
-			  	
+			  
+			  },
 			
 			  {
 
 			  	type: "input",
 			  	message: "How many units?",
 			  	name: "howMany"
-				
-				
-
-				}
+				/*Validation of input
+				validate: function(value){
+					if(isNaN === false){return true} 
+				} */
 			  }
 
 
@@ -118,9 +119,9 @@ function doQueries(tableName, callback){
 
 
 				var amount = res1[itemID - 1].stock_quantity;
-
+				console.log("Amount: "+res1[itemID - 1].stock_quantity)
 				//Compare stock quantity with user quantity and stop process if the user chooses a quantity that exceeds the stock quantity 
-				if(amount <= userInput.howMany){
+				if(amount < userInput.howMany){
 
 					console.log("Sorry, we do not have enough items in stock")
 					console.log("Push Control + C to restart the app")

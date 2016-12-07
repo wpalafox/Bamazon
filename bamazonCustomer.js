@@ -35,15 +35,6 @@ connection.connect(function(err){
 //The second message should ask how many units of the product they would like to buy.
 
 
-//instantiate
-/*var table = new Table({ 
-
-	head: ['Item', 'Product Name', 'Department Name', 'Price', 'Stock Quantity']
-  	, colWidths: [8, 14, 20, 10, 20]
-
-}); */
-
-
 // table is an Array, so you can `push`, `unshift`, `splice` and friends 
 
 
@@ -81,10 +72,12 @@ function doQueries(tableName, callback){
 
       	console.log(tableDisplay.toString());
       		//calls the prompt user function and takes the response as an argument/parameter
-      		
+      		console.log("Welcome to the Bamazon Store")
       	inquirer.prompt([
 
 			  	// Here we give the user a list to choose from.
+			  	
+
 			  {
 			    
 			    type: "input",
@@ -98,10 +91,7 @@ function doQueries(tableName, callback){
 			  	type: "input",
 			  	message: "How many units?",
 			  	name: "howMany"
-				/*Validation of input
-				validate: function(value){
-					if(isNaN === false){return true} 
-				} */
+				
 			  }
 
 
@@ -119,6 +109,7 @@ function doQueries(tableName, callback){
 
 
 				var amount = res1[itemID - 1].stock_quantity;
+				
 				console.log("Amount: "+res1[itemID - 1].stock_quantity)
 				//Compare stock quantity with user quantity and stop process if the user chooses a quantity that exceeds the stock quantity 
 				if(amount < userInput.howMany){
@@ -138,14 +129,6 @@ function doQueries(tableName, callback){
 				var total = userInput.howMany * res1[itemID-1].price;
 				console.log("Order Total: "+total);
 
-
-
-
-				
-				
-				
-
-				
 
 				connection.query("UPDATE storefront SET stock_quantity = ? WHERE item_id = ? ",[newAmount,itemID],function (err,res2){
 					
@@ -195,100 +178,6 @@ function doQueries(tableName, callback){
 };
 
 
-
-/*	request_handler(req){
-		doQueries( function(err, result){
-			if(err)
-				report_error(err);
-			else
-				write_result(req, result); 
-
-		});
-
-	} */
-
-
-
-
-
-
-
-
-/*
-
-connection.query("SELECT * FROM storefront", function(err2, upRes){
-      
-			var tableDisplayOuter = new Table({ 
-
-			head: ['Item', 'Product Name', 'Department Name', 'Price', 'Stock Quantity']
-		  	,colWidths: [6, 18, 18, 10, 17]
-
-				});
-
-
-			//if (err2) throw err2;
-        
-        	// table is an Array, so you can `push`, `unshift`, `splice` and friends 
-
-      		for(i=0;i<upRes.length;i++){
-
-      		tableDisplayOuter.push(
-    
-			    [upRes[i].item_id, upRes[i].product_name, upRes[i].department_name, upRes[i].price, upRes[i].stock_quantity] 
-			
-			);
-      
-      		}
-
-			console.log(tableDisplayOuter.toString());      		
-      		console.log("Stock Remaining: "+upRes[itemID-1].stock_quantity);
-
-      		});
-
-
-*/
-
-
-
-
-
-/*
-function testFunction(){ 
-
-	connection.query(
-				  
-	'UPDATE storefront SET stock_quantity = ? Where item_id = ?',
-	
-	[49, 3],
-//Need to make response global
-
-		function (err, res){
-
-			
-			if (err) throw err;
-			
-			console.log('Changed ' + res.changedRows + ' rows');
-				 
-		
-		}); 
-	
-
-};  
-
-*/
-
-
-
-
-
-
-
-//testFunction();
-//list('storefront');
-//promptUsers();
-
-
-
 //doQueries function handles the aync issues with ease
 doQueries('storefront', function(err, result){
 		if(err)
@@ -302,9 +191,3 @@ doQueries('storefront', function(err, result){
 		connection.end();
 		return;
 });
-
-
-
-
-
-

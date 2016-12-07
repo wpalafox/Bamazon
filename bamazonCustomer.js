@@ -68,7 +68,7 @@ function doQueries(tableName, callback){
 
 		});
 
-			
+		//Loop that dynamically produces the full table
 		for(i=0;i<res1.length;i++){
       		
       		tableDisplay.push(
@@ -90,18 +90,17 @@ function doQueries(tableName, callback){
 			    type: "input",
 			    message: "Enter an Item ID you would like to buy",
 			    name: "item"
-			  
-			  },
+			  	
 			
 			  {
 
 			  	type: "input",
 			  	message: "How many units?",
 			  	name: "howMany"
-				/*Validation of input
-				validate: function(value){
-					if(isNaN === false){return true} 
-				} */
+				
+				
+
+				}
 			  }
 
 
@@ -285,8 +284,11 @@ function testFunction(){
 
 //testFunction();
 //list('storefront');
-
 //promptUsers();
+
+
+
+//doQueries function handles the aync issues with ease
 doQueries('storefront', function(err, result){
 		if(err)
 			console.log("function finished with err:"+err);
@@ -300,20 +302,8 @@ doQueries('storefront', function(err, result){
 		return;
 });
 
-//connection.end();
 
 
-/*
-inquirer.prompt([
 
 
-	{
-		type: "input".
-		message: "What is the ID of the product you would like to by?"
-		productID: "productID"
-
-	},
-}])
-
-*/
 

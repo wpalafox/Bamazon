@@ -76,8 +76,7 @@ function doQueries(tableName, callback){
       	inquirer.prompt([
 
 			  	// Here we give the user a list to choose from.
-			  	
-
+			  
 			  {
 			    
 			    type: "input",

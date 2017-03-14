@@ -6,3 +6,10 @@ An application that will process orders from customers and deplete stock from th
 Run the command [node bamamzonCustomer.js] to shop around the bamazon store!
 
 Run the command [node bamazonManager1.js] to manage the store!
+
+
+
+# Technologies 
+
+Node.js
+mySQL (Database)

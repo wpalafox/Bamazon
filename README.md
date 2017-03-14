@@ -11,5 +11,5 @@ Run the command [node bamazonManager1.js] to manage the store!
 
 # Technologies 
 
-Node.js
-mySQL (Database)
+1. Node.js
+2. mySQL (Database)
